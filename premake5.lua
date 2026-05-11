@@ -1,4 +1,4 @@
-project "reactphysics3d"
+﻿project "reactphysics3d"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
@@ -6,6 +6,8 @@ project "reactphysics3d"
 
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
+
+    multiprocessorcompile "On"
 
     files {
         "include/**.h",
