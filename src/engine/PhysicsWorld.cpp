@@ -205,6 +205,19 @@ void PhysicsWorld::setJointDisabled(Entity jointEntity, bool isDisabled) {
     }
 }
 
+// EMBER PATCH: return true if both bodies and both colliders of a queued lost contact pair still exist
+/// Lost contact pairs are queued by computeBroadPhase(), which also runs outside update() from the
+/// testOverlap() and testCollision() snapshot queries, and they are not reported until the next
+/// update(). Anything destroyed in that window would otherwise be looked up here after it stopped
+/// existing, tripping the assert in Components::getEntityIndex().
+bool PhysicsWorld::isLostContactPairStillValid(const ContactPair& pair) const {
+
+    return mBodyComponents.hasComponent(pair.body1Entity) &&
+           mBodyComponents.hasComponent(pair.body2Entity) &&
+           mCollidersComponents.hasComponent(pair.collider1Entity) &&
+           mCollidersComponents.hasComponent(pair.collider2Entity);
+}
+
 // Return true if two bodies overlap
 /// Use this method if you are not interested in contacts but if you simply want to know
 /// if the two bodies overlap. If you want to get the contacts, you need to use the

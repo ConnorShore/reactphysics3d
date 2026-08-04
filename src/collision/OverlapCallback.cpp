@@ -84,6 +84,12 @@ OverlapCallback::CallbackData::CallbackData(Array<ContactPair>& contactPairs, Ar
     const uint64 nbLostContactPairs = mLostContactPairs.size();
     for (uint64 i=0; i < nbLostContactPairs; i++) {
 
+        // EMBER PATCH: drop pairs whose body or collider was destroyed after the pair was queued,
+        // otherwise getBody1()/getBody2() below look up an entity that no longer exists.
+        if (!mWorld.isLostContactPairStillValid(mLostContactPairs[i])) {
+            continue;
+        }
+
         // If the contact pair contains contacts (and is therefore not an overlap/trigger event)
         if (!onlyReportTriggers || mLostContactPairs[i].isTrigger) {
            mLostContactPairsIndices.add(i);

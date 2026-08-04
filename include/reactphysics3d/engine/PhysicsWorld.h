@@ -281,6 +281,9 @@ class PhysicsWorld {
         /// Notify the world whether a joint is disabled or not
         void setJointDisabled(Entity jointEntity, bool isDisabled);
 
+        /// EMBER PATCH: return true if both bodies and both colliders of a queued lost contact pair still exist
+        bool isLostContactPairStillValid(const ContactPair& pair) const;
+
         /// Solve the contacts and constraints
         void solveContactsAndConstraints(decimal timeStep);
 
